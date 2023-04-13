@@ -1,0 +1,447 @@
+export const description =
+  'On this page, we’ll dive into the different user endpoints you can use to manage users programmatically.'
+
+# Users
+
+As the name suggests, users are a core part of Protocol — the very reason Protocol exists is so you can see and invite/register new user. On this page, we'll dive into the different user endpoints you can use to manage users programmatically. We'll look at how to query, create, update, and delete users. you have to get Authorization to access this route {{ className: 'lead' }}
+
+## The users model
+
+The users model contains all the information about your users, such as their username, email, name, name_alias, role_id, branchDefault_id, branchAccess_id, isAchived, createdBy_id, updatedBy_id, createdAt, updatedAt, isAchived, werehouseDefault_id, and werehouseAccess_id.
+
+### Properties
+
+<Properties>
+  <Property name="id" type="string">
+    Unique identifier for the user.
+  </Property>
+  <Property name="username" type="string">
+    The username for the user login.
+  </Property>
+  <Property name="email" type="string">
+    The email for the user.
+  </Property>
+  <Property name="name" type="string">
+    The name for the user.
+  </Property>
+  <Property name="role_id" type="string">
+    Unique identifier for the role with the user to access some route. 
+  </Property>
+  <Property name="branchDefault_id" type="string">
+    Unique identifier for the default branch associated with the user. 
+  </Property>
+  <Property name="branchAccess_id" type="array">
+    Unique identifier for the all branch associated with the user. 
+  </Property>
+  <Property name="werehouseDefault_id" type="string">
+    Unique identifier for the default werehouse associated with the user. 
+  </Property>
+  <Property name="werehouseAccess_id" type="array">
+    Unique identifier for the all werehouse associated with the user. 
+  </Property>
+  <Property name="name_alias" type="string">
+    The name_alias for alias name.
+  </Property>
+  <Property name="isAchived" type="boolean">
+    The isAchived for acheved status.
+  </Property>
+  <Property name="createdBy_id" type="string">
+    The createdBy_id is unique id for tracking who create the data.
+  </Property>
+  <Property name="updatedBy_id" type="string">
+    The updatedBy_id is unique id for tracking who update the data.
+  </Property>
+  <Property name="created_at" type="timestamp">
+    Timestamp of when the user was created.
+  </Property>
+  <Property name="created_at" type="timestamp">
+    Timestamp of when the user was updated.
+  </Property>
+  <Property name="isAchived" type="boolean">
+    The isAchived for acheved status.
+  </Property>
+</Properties>
+
+---
+
+## List all users {{ tag: 'GET', label: '/v1/users' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your users. By default, a maximum of ten users are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of users returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/users">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/users \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "id": "WAz8eIbvDR60rouK",
+          "username": "FrankMcCallister",
+          "email": "frankmc@gmail.com",
+          "name": "Frank Mc Callister",
+          "role_id": "asDdz8eIbvDsjsf029kJ",
+          "branchDefault_id": "asDdz8eIbvDsjsf029kJ",
+          "branchAccess_id": [
+            "asDdz8eIbvDsjsf029kJ", 
+            //... 
+          ],
+          "werehouseDefault_id": "asDdz8eIbvDsjsf029kJ",
+          "werehouseAccess_id": [
+            "asDdz8eIbvDsjsf029kJ", 
+            //... 
+          ],
+          "isAchived": true,
+          "createdBy_id": "xgQQXg3hrtjh7AvZ",
+          "updatedBy_id": "xgQQXg3hrtjh7AvZ",
+          "createdAt": 705103200,
+          "updatedAt": 705103200,
+          "isAchive": true
+        },
+        {
+          "id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a user {{ tag: 'POST', label: '/v1/users' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new user to your user list in Protocol. To add a user, you must provide their Protocol name, password, email, role, branch_assigned and branch_access.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The name for the user.
+      </Property>
+      <Property name="password" type="string">
+        The password for the user.
+      </Property>
+      <Property name="email" type="string">
+        The email for the user.
+      </Property>
+      <Property name="role" type="string">
+        The role for the user Authorization access.
+      </Property>
+      <Property name="branch_assigned" type="string">
+        The branch_assigned for the user.
+      </Property>
+      <Property name="branch_access" type="array">
+        The branch_access for the user.
+      </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="name_alias" type="string">
+        The name alias for the user.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/users">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/users \
+      -H "Authorization: Bearer {token}" \
+      -d name="tester" \
+      -d password="testing123" \
+      -d email="tester@gmail.com" \
+      -d role="dnHdbOW234jdcOd" \
+      -d branch_assigned="saKFhwn92ds3bdhSK" \
+      -d branch_access=["hAndnds47cfh4Nde", "..."] \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.create({
+      name:"tester",
+      password:"testing123",
+      email:"tester@gmail.com",
+      role:"dnHdbOW234jdcOd",
+      branch_assigned:"saKFhwn92ds3bdhSK",
+      branch_access:["hAndnds47cfh4Nde", "..."],
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.create(
+      name="tester",
+      password="testing123",
+      email="tester@gmail.com",
+      role="dnHdbOW234jdcOd",
+      branch_assigned="saKFhwn92ds3bdhSK",
+      branch_access=["hAndnds47cfh4Nde", "..."],
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->create([
+      "name" => "tester",
+      "password" => "testing123",
+      "email" => "tester@gmail.com",
+      "role" => "dnHdbOW234jdcOd",
+      "branch_assigned" => "saKFhwn92ds3bdhSK",
+      "branch_access" => ["hAndnds47cfh4Nde", "..."],
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "AQdjfe2dfsdn5dS",
+      "name": "tester",
+      "email": "tester@gmail.com",
+      "role": "dnHdbOW234jdcOd",
+      "branch_assigned": "saKFhwn92ds3bdhSK",
+      "branch_access": ["hAndnds47cfh4Nde", "..."],
+      "createdAt": 692233200
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a user {{ tag: 'GET', label: '/v1/users/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a user by providing their Protocol id. Refer to [the list](#the-user-model) at the top of this page to see which properties are included with user objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/users/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/users/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.get('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.get("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->get('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "WAz8eIbvDR60rouK",
+      "username": "FrankMcCallister",
+      "phone_number": "1-800-759-3000",
+      "avatar_url": "https://assets.protocol.chat/avatars/frank.jpg",
+      "display_name": null,
+      "conversation_id": "xgQQXg3hrtjh7AvZ",
+      "last_active_at": 705103200,
+      "created_at": 692233200
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a user {{ tag: 'PUT', label: '/v1/users/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a user. Currently, the only attribute that can be updated on users is the `display_name` attribute which controls how a user appears in your user list in Protocol.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="display_name" type="string">
+        The user display name in the user list. By default, this is just the username.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/users/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/users/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}" \
+      -d display_name="UncleFrank"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.update('WAz8eIbvDR60rouK', {
+        display_name: 'UncleFrank',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.update("WAz8eIbvDR60rouK", display_name="UncleFrank")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->update('WAz8eIbvDR60rouK', [
+      'display_name' => 'UncleFrank',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "WAz8eIbvDR60rouK",
+      "username": "FrankMcCallister",
+      "phone_number": "1-800-759-3000",
+      "avatar_url": "https://assets.protocol.chat/avatars/frank.jpg",
+      "display_name": "UncleFrank",
+      "conversation_id": "xgQQXg3hrtjh7AvZ",
+      "last_active_at": 705103200,
+      "created_at": 692233200
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a user {{ tag: 'DELETE', label: '/v1/users/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete users from your user list in Protocol. Note: This will also delete your conversation with the given user.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/users/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/users/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.delete('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.delete("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->delete('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
